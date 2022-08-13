@@ -254,6 +254,7 @@ def plot_losses(history):
 # A function that returns the predicted label for a dataset (test set).
 
 def predict_image(img, model, dataset, device):
+    # dataset: a data set gotten by torchvision.datasets.DatasetFolder/ImageFolder
     # Convert to a batch of 1
     xb = to_device(img.unsqueeze(0), device)
     # Get predictions from model
@@ -263,7 +264,15 @@ def predict_image(img, model, dataset, device):
     # Retrieve the class label
     return dataset.classes[preds[0].item()]
 
-
-
+def predict_image_label(img, model, Labels, device):
+    # Labels: a vector contain Labels of images, for ex: Label= ['class1', 'class2', 'class3'] associative with 0, 1, 2
+    # Convert to a batch of 1
+    xb = to_device(img.unsqueeze(0), device)
+    # Get predictions from model
+    yb = model(xb)
+    # Pick index with highest probability
+    _, preds  = torch.max(yb, dim=1)
+    # Retrieve the class label
+    return Labels[preds[0].item()]
 
 
